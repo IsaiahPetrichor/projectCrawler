@@ -1,24 +1,18 @@
-import Golem from '../objects/golem'
 import FpsText from '../objects/fpsText'
+import Doorway from '../objects/doorway'
+import controls from '../actions/controls'
+import player from '../objects/player'
 
 const gameState = {
   speed: 2.5
 }
 
 export default class LobbyScene extends Phaser.Scene {
-  fpsText
-
-  constructor(entryPoint = { x: 500, y: 500 }) {
+  constructor() {
     super({ key: 'LobbyScene' })
-    this.spawn = entryPoint
   }
 
   create() {
-    // create player
-    gameState.player = new Golem(this, this.spawn.x, this.spawn.y)
-    gameState.player.setScale(0.2)
-    gameState.player.setSize(300, 400)
-
     // create fps counter
     this.fpsText = new FpsText(this)
 
@@ -30,42 +24,20 @@ export default class LobbyScene extends Phaser.Scene {
       })
       .setOrigin(1, 0)
 
-    // create player controls
-    gameState.keys = this.input.keyboard.addKeys('w,a,s,d,space,shift')
+    // create player
+    player(this, gameState, { x: 960, y: 540 })
 
     // create settings entrance
-    const settings = this.add.rectangle(50, 500, 100, 100, 0x000000)
-    this.physics.add.existing(settings)
-    this.physics.add.collider(gameState.player, settings, () => {
-      this.scene.start('SettingsScene')
-    })
+    const settings = new Doorway(this, 50, 540, 'SettingsScene', 'Settings', gameState)
 
-    this.add.text(50, 500, 'Settings', { fontSize: '20px' }).setOrigin(0.5)
+    // create credits entrance
+    const credits = new Doorway(this, 1870, 540, 'CreditsScene', 'Credits', gameState)
   }
 
   update() {
     this.fpsText.update()
 
-    if (gameState.keys.w.isDown) {
-      gameState.player.y -= gameState.speed
-    }
-
-    if (gameState.keys.a.isDown) {
-      gameState.player.x -= gameState.speed
-    }
-
-    if (gameState.keys.s.isDown) {
-      gameState.player.y += gameState.speed
-    }
-
-    if (gameState.keys.d.isDown) {
-      gameState.player.x += gameState.speed
-    }
-
-    if (gameState.keys.shift.isDown) {
-      gameState.speed = 4
-    } else {
-      gameState.speed = 2.5
-    }
+    // create controls
+    controls(gameState)
   }
 }

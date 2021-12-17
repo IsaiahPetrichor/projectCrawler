@@ -1,4 +1,5 @@
 import 'phaser'
+import CreditsScene from './scenes/creditsScene'
 import LobbyScene from './scenes/lobbyScene'
 import PreloadScene from './scenes/preloadScene'
 import SettingsScene from './scenes/settingsScene'
@@ -16,7 +17,7 @@ const config = {
     width: DEFAULT_WIDTH,
     height: DEFAULT_HEIGHT
   },
-  scene: [PreloadScene, LobbyScene, SettingsScene],
+  scene: [PreloadScene, LobbyScene, SettingsScene, CreditsScene],
   physics: {
     default: 'arcade',
     arcade: {
